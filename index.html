@@ -479,11 +479,19 @@ function setLive(ok){
 
 function formatDate(val){
   if(!val||val===''||val==='—') return '—';
-  // If it's a Date object serialized as string or number
   if(typeof val==='number') return '—';
-  // Already formatted string
   const s=String(val).trim();
   if(!s||s==='0') return '—';
+
+  // Handle ISO format: 2026-03-24T18:30:00.000Z
+  const isoMatch=s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if(isoMatch){
+    const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const day=parseInt(isoMatch[3]);
+    const mon=months[parseInt(isoMatch[2])-1];
+    const yr=isoMatch[1];
+    return `${day}-${mon}-${yr}`;
+  }
   return s;
 }
 
